@@ -6,8 +6,10 @@ import { getRandomArticles, searchArticles } from "../services/wikipediaService"
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 const Index = () => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const location = useLocation();
@@ -40,8 +42,8 @@ const Index = () => {
 
   if (error) {
     toast({
-      title: "Error",
-      description: "Failed to load articles. Please try again later.",
+      title: t('error'),
+      description: t('failedToLoadArticles'),
       variant: "destructive",
     });
   }
@@ -49,7 +51,7 @@ const Index = () => {
   if (isLoading) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-wikitok-dark">
-        <div className="text-white">Loading amazing articles...</div>
+        <div className="text-white">{t('loadingAmazingArticles')}</div>
       </div>
     );
   }
@@ -57,7 +59,7 @@ const Index = () => {
   if (error || !articles || articles.length === 0) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-wikitok-dark">
-        <div className="text-white">Something went wrong. Please try again.</div>
+        <div className="text-white">{t('somethingWentWrong')}</div>
       </div>
     );
   }

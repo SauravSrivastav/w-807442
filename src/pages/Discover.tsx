@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getRandomArticles, WikipediaArticle } from "@/services/wikipediaService";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from 'react-i18next';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -21,6 +22,7 @@ const categories = [
 ];
 
 const Discover = () => {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const navigate = useNavigate();
   const { ref, inView } = useInView();
@@ -77,8 +79,8 @@ const Discover = () => {
     setSelectedCategory(category);
     
     toast({
-      title: `Loading ${category} articles`,
-      description: "Please wait while we fetch the content...",
+      title: t('loadingCategoryArticles', { category: t(category) }),
+      description: t('pleaseWait'),
       duration: 2000,
     });
 
@@ -109,7 +111,7 @@ const Discover = () => {
                     : "bg-white/10 hover:bg-white/20"
                 }`}
               >
-                {category}
+                {t(category)}
               </button>
             ))}
           </div>
@@ -139,7 +141,7 @@ const Discover = () => {
               <div className="absolute bottom-0 p-3 w-full">
                 <h3 className="text-sm font-semibold line-clamp-2">{article.title}</h3>
                 <p className="text-xs text-gray-300 mt-1">
-                  {article.views.toLocaleString()} views
+                  {t('views', { count: article.views.toLocaleString() })}
                 </p>
               </div>
             </div>

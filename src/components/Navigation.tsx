@@ -13,8 +13,11 @@ import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { searchArticles, getRandomArticles } from "../services/wikipediaService";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Navigation = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
@@ -42,8 +45,8 @@ const Navigation = () => {
     setOpen(false);
     setSearchValue(title);
     toast({
-      title: "Loading articles",
-      description: `Loading articles about ${title}...`,
+      title: t('loadingArticles'), // Translate toast title
+      description: t('loadingArticlesDesc', { title }), // Translate toast description
       duration: 2000,
     });
     
@@ -65,10 +68,10 @@ const Navigation = () => {
   };
 
   const handleRandomArticle = async () => {
-    setSearchValue(""); // Clear search value when getting random article
+    setSearchValue("");
     toast({
-      title: "Loading random article",
-      description: "Finding something interesting for you...",
+      title: t('loadingRandomArticle'), // Translate toast title
+      description: t('findingSomethingInteresting'), // Translate toast description
       duration: 2000,
     });
     const randomArticles = await getRandomArticles(3);
@@ -101,7 +104,7 @@ const Navigation = () => {
           className="text-xl font-bold text-wikitok-red cursor-pointer"
           onClick={handleRandomArticle}
         >
-          WikTok
+          {t('wikTok')} {/* Translate WikTok */}
         </div>
         <div 
           className="flex items-center bg-black/20 backdrop-blur-sm rounded-full px-4 py-2 cursor-pointer"
@@ -109,10 +112,11 @@ const Navigation = () => {
         >
           <Search className="w-4 h-4 text-white/60 mr-2" />
           <span className="text-white/60 text-sm">
-            {searchValue || "Search articles"}
+            {searchValue || t('searchArticles')} {/* Translate Search articles */}
           </span>
         </div>
-        <div className="flex space-x-6">
+        <div className="flex items-center space-x-4">
+          <LanguageSwitcher />
           <Compass 
             className={`w-5 h-5 cursor-pointer transition-colors ${
               location.pathname === "/discover" ? "text-wikitok-red" : "text-white"
@@ -128,26 +132,26 @@ const Navigation = () => {
       >
         <Command shouldFilter={false}>
           <CommandInput 
-            placeholder="Search articles..." 
+            placeholder={t('searchArticlesPlaceholder')} // Translate placeholder
             value={searchValue}
             onValueChange={setSearchValue}
             className="border-none focus:ring-0"
           />
           <CommandList className="max-h-[80vh] overflow-y-auto">
             {isLoading && (
-              <CommandEmpty>Searching...</CommandEmpty>
+              <CommandEmpty>{t('searching')}</CommandEmpty> // Translate Searching...
             )}
             {!isLoading && !searchResults && searchValue.length > 0 && (
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>{t('noResultsFound')}</CommandEmpty> // Translate No results found.
             )}
             {!isLoading && !searchValue && (
-              <CommandEmpty>Start typing to search articles</CommandEmpty>
+              <CommandEmpty>{t('startTypingToSearch')}</CommandEmpty> // Translate Start typing to search
             )}
             {!isLoading && searchResults && searchResults.length === 0 && (
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>{t('noResultsFound')}</CommandEmpty> // Translate No results found.
             )}
             {!isLoading && searchResults && searchResults.length > 0 && (
-              <CommandGroup heading="Articles">
+              <CommandGroup heading={t('articles')}> {/* Translate Articles */}
                 {searchResults.map((result) => (
                   <CommandItem
                     key={result.id}
