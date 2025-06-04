@@ -2,8 +2,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Progress } from "./ui/progress";
 import { getRandomArticles, getRelatedArticles } from "../services/wikipediaService";
+import { useTranslation } from 'react-i18next';
 
 const ArticleViewer = ({ articles: initialArticles, onArticleChange }) => {
+  const { t } = useTranslation();
   const [articles, setArticles] = useState(initialArticles);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
@@ -122,9 +124,9 @@ const ArticleViewer = ({ articles: initialArticles, onArticleChange }) => {
               {currentIndex === index ? displayedText : article.content}
             </p>
             <div className="flex items-center space-x-2 text-sm text-gray-300">
-              <span>{article.readTime} min read</span>
+              <span>{t('minRead', { count: article.readTime })}</span>
               <span>•</span>
-              <span>{article.views.toLocaleString()} views</span>
+              <span>{t('views', { count: article.views.toLocaleString() })}</span>
             </div>
           </motion.div>
           {currentIndex === index && (
@@ -140,7 +142,7 @@ const ArticleViewer = ({ articles: initialArticles, onArticleChange }) => {
       ))}
       {isLoading && (
         <div className="h-screen w-screen flex items-center justify-center">
-          <div className="text-white">Loading more articles...</div>
+          <div className="text-white">{t('loadingMoreArticles')}</div>
         </div>
       )}
     </main>

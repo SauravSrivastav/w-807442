@@ -1,6 +1,8 @@
 import { Bookmark, Share2, Edit, BookOpen } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 const RightSidebar = ({ article }) => {
+  const { t } = useTranslation();
   const handleWikipediaRedirect = () => {
     const baseUrl = "https://en.wikipedia.org/wiki/";
     const articleTitle = encodeURIComponent(article.title);
@@ -17,7 +19,7 @@ const RightSidebar = ({ article }) => {
     if (navigator.share) {
       navigator.share({
         title: article.title,
-        text: `Check out this article about ${article.title} on WikiTok!`,
+        text: t('shareMessage', { title: article.title }),
         url: shareUrl,
       }).catch(console.error);
     } else {
@@ -55,28 +57,28 @@ const RightSidebar = ({ article }) => {
         <button className="sidebar-icon" onClick={handleBookmark}>
           <Bookmark className="w-7 h-7" />
         </button>
-        <span className="text-xs mt-1">Save</span>
+        <span className="text-xs mt-1">{t('save')}</span>
       </div>
       
       <div className="flex flex-col items-center">
         <button className="sidebar-icon" onClick={handleShare}>
           <Share2 className="w-7 h-7" />
         </button>
-        <span className="text-xs mt-1">Share</span>
+        <span className="text-xs mt-1">{t('share')}</span>
       </div>
       
       <div className="flex flex-col items-center">
         <button className="sidebar-icon" onClick={handleEdit}>
           <Edit className="w-7 h-7" />
         </button>
-        <span className="text-xs mt-1">Edit</span>
+        <span className="text-xs mt-1">{t('edit')}</span>
       </div>
       
       <div className="flex flex-col items-center">
         <button className="sidebar-icon" onClick={handleWikipediaRedirect}>
           <BookOpen className="w-7 h-7" />
         </button>
-        <span className="text-xs mt-1">View</span> {/* Updated text here */}
+        <span className="text-xs mt-1">{t('viewArticle')}</span> {/* Updated text here */}
       </div>
     </div>
   );
